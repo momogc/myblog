@@ -57,9 +57,4 @@ typings/
 # dotenv environment variables file
 .env
 
-# 输出目录
-dist
-
-# 打包目录
-【打包输出】
 
