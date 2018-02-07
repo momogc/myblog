@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha test",
     "dev": "supervisor index.js",
-    "pro": "NODE_ENV=remote node index.js"
+    "pro": "NODE_ENV=remote pm2 start index.js --name 'myblog'"
   },
   "author": "",
   "license": "ISC",
