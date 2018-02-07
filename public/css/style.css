@@ -76,3 +76,8 @@ a:hover {
 .post-content .tag.right a {
   color: #999;
 }
+
+.segment pre {
+  white-space: pre-wrap;
+  word-wrap:break-word;
+}

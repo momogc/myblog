@@ -1,6 +1,7 @@
 const path = require('path')
 const express = require('express')
 const session = require('express-session')
+const bodyParser = require('body-parser')
 const MongoStore = require('connect-mongo')(session)
 const flash = require('connect-flash')
 const config = require('config-lite')(__dirname)
@@ -10,7 +11,7 @@ const winston = require('winston')
 const expressWinston = require('express-winston')
 
 const app = express()
-
+app.use(bodyParser.json())
 // 设置模板目录
 app.set('views', path.join(__dirname, 'views'))
 // 设置模板引擎为 ejs
