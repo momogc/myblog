@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <title>nice</title>
+</head>
+<body>
+    <p>hahaha  it is a good day to die</p>
+    <button onclick="ajaxReq()">ajax</button>
+</body>
+<script>
+  var obj = {
+    a:1,
+    b:3,
+    c:4,
+    d:5
+  }
+  function ajaxReq () {
+    $.ajax({
+      type: 'POST',
+      url: 'http://192.168.5.22:3000/api',
+      data: JSON.stringify(obj),
+      dataType: 'json',
+      contentType: 'application/json',
+      async: true,
+      timeout: 30000,
+      success: function (data) {
+        console.log(data)
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        console.log(XMLHttpRequest, textStatus)
+      }
+    })
+  }
+</script>
+</html>

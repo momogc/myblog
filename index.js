@@ -1,8 +1,8 @@
 const path = require('path')
 const express = require('express')
 const session = require('express-session')
-const bodyParser = require('body-parser')
 const MongoStore = require('connect-mongo')(session)
+const formidable = require('express-formidable')
 const flash = require('connect-flash')
 const config = require('config-lite')(__dirname)
 const routes = require('./routes')
@@ -11,7 +11,7 @@ const winston = require('winston')
 const expressWinston = require('express-winston')
 
 const app = express()
-app.use(bodyParser.json())
+
 // 设置模板目录
 app.set('views', path.join(__dirname, 'views'))
 // 设置模板引擎为 ejs
@@ -19,6 +19,7 @@ app.set('view engine', 'ejs')
 
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')))
+
 // session 中间件
 app.use(session({
   name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
@@ -36,10 +37,10 @@ app.use(session({
 app.use(flash())
 
 // 处理表单及文件上传的中间件
-app.use(require('express-formidable')({
-  uploadDir: path.join(__dirname, 'public/img'), // 上传文件目录
-  keepExtensions: true// 保留后缀
-}))
+// app.use(require('express-formidable')({
+//   uploadDir: path.join(__dirname, 'public/img'), // 上传文件目录
+//   keepExtensions: true// 保留后缀
+// }))
 
 // 设置模板全局常量
 app.locals.blog = {
@@ -67,6 +68,7 @@ app.use(expressWinston.logger({
     })
   ]
 }))
+
 // 路由
 routes(app)
 // 错误请求的日志
