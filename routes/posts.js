@@ -23,24 +23,24 @@ router.get('/', function (req, res, next) {
 // POST /posts/create 发表一篇文章
 router.post('/create', checkLogin, upload.array(), function (req, res, next) {
   console.log(req.body)
-  // const author = req.session.user._id
-  // const title = req.fields.title
-  // const content = req.fields.content
+  const author = req.session.user._id
+  const title = req.body.title
+  const content = req.body.content
 
-  // let post = {
-  //   author: author,
-  //   title: title,
-  //   content: content
-  // }
-  // PostModel.create(post)
-  //   .then(function (result) {
-  //     // 此 post 是插入 mongodb 后的值，包含 _id
-  //     post = result.ops[0]
-  //     req.flash('success', '发表成功')
-  //     // 发表成功后跳转到该文章页
-  //     res.redirect(`/posts/${post._id}`)
-  //   })
-  //   .catch(next)
+  let post = {
+    author: author,
+    title: title,
+    content: content
+  }
+  PostModel.create(post)
+    .then(function (result) {
+      // 此 post 是插入 mongodb 后的值，包含 _id
+      post = result.ops[0]
+      req.flash('success', '发表成功')
+      // 发表成功后跳转到该文章页
+      res.redirect(`/posts/${post._id}`)
+    })
+    .catch(next)
 })
 
 // GET /posts/create 发表文章页
@@ -92,11 +92,11 @@ router.get('/:postId/edit', checkLogin, function (req, res, next) {
 })
 
 // POST /posts/:postId/edit 更新一篇文章
-router.post('/:postId/edit', checkLogin, function (req, res, next) {
+router.post('/:postId/edit', checkLogin, upload.array(), function (req, res, next) {
   const postId = req.params.postId
   const author = req.session.user._id
-  const title = req.fields.title
-  const content = req.fields.content
+  const title = req.body.title
+  const content = req.body.content
 
   // 校验参数
   try {

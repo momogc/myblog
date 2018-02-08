@@ -1,14 +1,15 @@
 const express = require('express')
 const router = express.Router()
-
+const multer = require('multer')
+const upload = multer({ dest: 'uploads/' })
 const checkLogin = require('../middlewares/check').checkLogin
 const CommentModel = require('../models/comments')
 
 // POST /comments 创建一条留言
-router.post('/', checkLogin, function (req, res, next) {
+router.post('/', checkLogin, upload.array(), function (req, res, next) {
   const author = req.session.user._id
-  const postId = req.fields.postId
-  const content = req.fields.content
+  const postId = req.body.postId
+  const content = req.body.content
 
   // 校验参数
   try {

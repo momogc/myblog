@@ -27,7 +27,7 @@
         <% }) %>
 
         <% if (user) { %>
-          <form class="ui reply form" method="post" action="/comments">
+          <form class="ui reply form" method="post" action="/comments" enctype="multipart/form-data">
             <input name="postId" value="<%= post._id %>" hidden>
             <div class="field">
               <textarea name="content"></textarea>

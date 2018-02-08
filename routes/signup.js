@@ -2,6 +2,17 @@ const fs = require('fs')
 const path = require('path')
 const sha1 = require('sha1')
 const express = require('express')
+const multer = require('multer')
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(path.resolve(__dirname, '..'), 'public/img'))
+  },
+  filename: function (req, file, cb) {
+    let fileFormat = (file.originalname).split('.')
+    cb(null, file.fieldname + Math.random().toString(36).substr(2) + Date.now() + '.' + fileFormat[fileFormat.length - 1])
+  }
+}) // fieldname
+const upload = multer({ storage })
 const router = express.Router()
 
 const UserModel = require('../models/users')
@@ -9,17 +20,19 @@ const checkNotLogin = require('../middlewares/check').checkNotLogin
 
 // GET /signup 注册页
 router.get('/', checkNotLogin, function (req, res, next) {
+  console.log(path.join(path.resolve(__dirname, '..'), 'public/img'))
   res.render('signup')
 })
 
 // POST /signup 用户注册
-router.post('/', checkNotLogin, function (req, res, next) {
-  const name = req.fields.name
-  const gender = req.fields.gender
-  const bio = req.fields.bio
-  const avatar = req.files.avatar.path.split(path.sep).pop()
-  let password = req.fields.password
-  const repassword = req.fields.repassword
+router.post('/', checkNotLogin, upload.single('avatar'), function (req, res, next) {
+  console.log(req.file)
+  const name = req.body.name
+  const gender = req.body.gender
+  const bio = req.body.bio
+  const avatar = req.file.path.split(path.sep).pop()
+  let password = req.body.password
+  const repassword = req.body.repassword
 
   // 校验参数
   try {
@@ -32,7 +45,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
     if (!(bio.length >= 1 && bio.length <= 30)) {
       throw new Error('个人简介请限制在 1-30 个字符')
     }
-    if (!req.files.avatar.name) {
+    if (!req.file) {
       throw new Error('缺少头像')
     }
     if (password.length < 6) {
@@ -43,7 +56,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
     }
   } catch (e) {
     // 注册失败，异步删除上传的头像
-    fs.unlink(req.files.avatar.path)
+    fs.unlink(req.file.path)
     req.flash('error', e.message)
     return res.redirect('/signup')
   }
@@ -74,7 +87,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
     })
     .catch(function (e) {
       // 注册失败，异步删除上传的头像
-      fs.unlink(req.files.avatar.path)
+      fs.unlink(req.file.path)
       // 用户名被占用则跳回注册页，而不是错误页
       if (e.message.match('duplicate key')) {
         req.flash('error', '用户名已被占用')
