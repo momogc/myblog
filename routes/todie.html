@@ -10,8 +10,39 @@
 <body>
     <p>hahaha  it is a good day to die</p>
     <button onclick="ajaxReq()">ajax</button>
+    <form enctype="multipart/form-data" method="post" name="fileinfo">
+      <label>Your email address:</label>
+      <input type="email" autocomplete="on" autofocus name="userid" placeholder="email" required size="32" maxlength="64" /><br />
+      <label>Custom file label:</label>
+      <input type="text" name="filelabel" size="12" maxlength="32" /><br />
+      <label>File to stash:</label>
+      <input type="file" name="file" required />
+      <input type="submit" value="Stash the file!" />
+    </form>
+    <div></div>
 </body>
 <script>
+  var form = document.forms.namedItem('fileinfo')
+  form.addEventListener('submit', function(event) {
+    var fd = new FormData(document.querySelector("form"));
+    $.ajax({
+      type: 'POST',
+      url: 'http://192.168.5.22:3000/api/form',
+      data: fd,
+      processData: false,  // 不处理数据
+      contentType: false,
+      async: true,
+      timeout: 30000,
+      success: function (data) {
+        console.log(data)
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        console.log(XMLHttpRequest, textStatus)
+      }
+    })
+    event.preventDefault()
+  })
+
   var obj = {
     a:1,
     b:3,
