@@ -25,21 +25,29 @@
   var form = document.forms.namedItem('fileinfo')
   form.addEventListener('submit', function(event) {
     var fd = new FormData(document.querySelector("form"));
-    $.ajax({
-      type: 'POST',
-      url: 'http://192.168.5.22:3000/api/form',
-      data: fd,
-      processData: false,  // 不处理数据
-      contentType: false,
-      async: true,
-      timeout: 30000,
-      success: function (data) {
-        console.log(data)
-      },
-      error: function (XMLHttpRequest, textStatus, errorThrown) {
-        console.log(XMLHttpRequest, textStatus)
-      }
-    })
+    // $.ajax({
+    //   type: 'POST',
+    //   url: 'http://192.168.5.22:3000/api/form',
+    //   data: fd,
+    //   processData: false,  // 不处理数据
+    //   contentType: false,
+    //   async: true,
+    //   timeout: 30000,
+    //   success: function (data) {
+    //     console.log(data)
+    //   },
+    //   error: function (XMLHttpRequest, textStatus, errorThrown) {
+    //     console.log(XMLHttpRequest, textStatus)
+    //   }
+    // })
+    var oOutput = document.querySelector("div"),
+      oData = new FormData(form);
+    var oReq = new XMLHttpRequest();
+    oReq.onreadystatechange = function () {
+      console.log(oReq.response)
+    }
+    oReq.open("POST", "http://192.168.5.22:3000/api/form", true);
+    oReq.send(fd);
     event.preventDefault()
   })
 

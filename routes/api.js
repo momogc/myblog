@@ -3,7 +3,7 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ dest: 'public/img' })
 const BASE_DIR = __dirname
 router.post('/', jsonParser, function (req, res) {
   console.log(req.body)
